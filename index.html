@@ -50,13 +50,13 @@
         function updateURL() {
             const params = new URLSearchParams();
             countdowns.forEach((countdown, index) => {
-                params.append(`name${index}`, countdown.name);
-                params.append(`emoji${index}`, countdown.emoji);
-                params.append(`endTime${index}`, countdown.endTime);
+                params.append(`name${index}`, encodeURIComponent(countdown.name));
+                params.append(`emoji${index}`, encodeURIComponent(countdown.emoji));
+                params.append(`endTime${index}`, encodeURIComponent(countdown.endTime));
             });
             const newURL = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
             history.pushState(null, '', newURL);
-            shareUrlInput.value = newURL;
+            shareUrlInput.value = decodeURIComponent(newURL);
         }
 
         function addCountdown(name, emoji, endTime) {
@@ -119,9 +119,9 @@
             const params = new URLSearchParams(window.location.search);
             let index = 0;
             while (params.has(`name${index}`)) {
-                const name = params.get(`name${index}`);
-                const emoji = params.get(`emoji${index}`);
-                const endTime = params.get(`endTime${index}`);
+                const name = decodeURIComponent(params.get(`name${index}`));
+                const emoji = decodeURIComponent(params.get(`emoji${index}`));
+                const endTime = decodeURIComponent(params.get(`endTime${index}`));
                 countdowns.push({ name, emoji, endTime });
                 index++;
             }
